@@ -9,6 +9,7 @@ Features:
 + Glob patterns.
 + Extending and merging multiple configs, shared configurations.
 + Remote configs.
++ Predefined configs for bugs, security, styleguides.
 
 ## Getting started
 
@@ -81,8 +82,11 @@ max_line_length = 90
 
 In this example, flake8-ruler will read remote config, local config (`.flake8-ruler.toml`), and then current config. So, even if `max_line_length` is specified in some of base configs, it will be overwritten by `max_line_length = 90` from the current config.
 
+You can find some predefined configs in [./configs/](./configs/) directory.
+
 ## Resources
 
++ [./configs/](./configs/) - ready to use base configs for flake8-ruler.
 + [flake8 documentation](https://flake8.pycqa.org/en/latest/).
 + [flake8-codes](https://github.com/orsinium-labs/flake8-codes) - library used to extract the installed plugins and their error codes.
 + [awesome-flake8-extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions) - list of flake8 plugins.

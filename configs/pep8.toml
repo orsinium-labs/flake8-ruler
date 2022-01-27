@@ -1,0 +1,5 @@
+# Rules for enforcing PEP-8 styleguide.
+[tool.flake8_ruler.plugins]
+pycodestyle = ["+*"]
+pep8-naming = ["+*"]
+flake8-docstrings = ["-*", "+D2??", "+D300", "+D301"]

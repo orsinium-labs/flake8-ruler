@@ -1,0 +1,17 @@
+# Rules for enforcing low code complexity.
+[tool.flake8_ruler]
+max-line-length = 90            # flake8-length
+max-complexity = 10             # mccabe
+max-cognitive-complexity = 7    # flake8-cognitive-complexity
+max-expression-complexity = 7   # flake8-expression-complexity
+max-function-length = 100       # flake8-functions
+max-annotations-complexity = 3  # flake8-annotations-complexity
+
+[tool.flake8_ruler.plugins]
+flake8-annotations-complexity = ["+*"]
+flake8-cognitive-complexity = ["+*"]
+flake8-expression-complexity = ["+*"]
+flake8-functions = ["+*", "-CFQ003"]
+flake8-length = ["+*"]
+mccabe = ["+*"]
+wemake-python-styleguide = ["-*", "+WPS0", "+WPS2??"]
