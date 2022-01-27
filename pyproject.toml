@@ -28,6 +28,7 @@ keywords = [
 dependencies = [
     "flake8",
     "flake8-codes",
+    "urllib3",
 ]
 [project.optional-dependencies]
 test = [

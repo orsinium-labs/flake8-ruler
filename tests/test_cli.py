@@ -19,7 +19,7 @@ OUTPUT_CONFIG = """
     max_line_length = 90
     select =
         # pycodestyle
-        E902,  # %s
+        E902,  # *s
         # pyflakes
         F621,  # too many expressions in star-unpacking assignment
         F622,  # two starred expressions in assignment

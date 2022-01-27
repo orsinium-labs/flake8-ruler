@@ -38,6 +38,7 @@ class INI(NamedTuple):
         self.parser['flake8']['select'] += f'\n# {plugin_name}'
 
     def add_code(self, code: str, message: str) -> None:
+        message = message.replace("%", "*")
         self.parser['flake8']['select'] += f'\n{code},  # {message}'
 
     def save(self) -> None:
