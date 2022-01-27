@@ -1,3 +1,6 @@
+[tool.flake8_ruler]
+max_line_length = 90
+
 [tool.flake8_ruler.plugins]
 "*" = ["+*"]
 
