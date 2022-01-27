@@ -1,4 +1,4 @@
-"""Generate setup.cfg lfake8 config from pyproject.toml
+"""More powerful configs for flake8.
 """
 
 from ._cli import main

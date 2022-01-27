@@ -1,3 +1,47 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "flake8_ruler"
+authors = [
+    {name = "Gram", email = "gram@orsinium.dev"},
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.6"
+dynamic = ["version", "description"]
+classifiers = [
+     "Development Status :: 5 - Production/Stable",
+    "Environment :: Plugins",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Quality Assurance",
+]
+keywords = [
+    "flake8",
+    "pyproject.toml",
+    "flakehell",
+]
+dependencies = [
+    "flake8",
+    "flake8-codes",
+]
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+lint = [
+    "wemake-python-styleguide",
+    "unify",
+    "isort",
+]
+
+[project.urls]
+Source = "https://github.com/orsinium-labs/flake8-ruler"
+
 [tool.flake8_ruler]
 max_line_length = 90
 base = ["./configs/bugs.toml"]
@@ -18,4 +62,4 @@ no_implicit_optional = true
 strict_equality = true
 warn_redundant_casts = true
 warn_unreachable = true
-# warn_unused_ignores = true
+warn_unused_ignores = true
