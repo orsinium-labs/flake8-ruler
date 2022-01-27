@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union, NamedTuple
+from typing import Any, Dict, Iterator, List, Set, Tuple, Union, NamedTuple
 import re
 import toml
 import urllib3
@@ -8,7 +8,7 @@ from flake8.utils import fnmatch
 from ._rules import Rules
 
 REX_NAME = re.compile(r'[-_.]+')
-TOOL_NAMES = ('flake8-ruler', 'flake8_ruler', 'flakehell')
+TOOL_NAMES = ('flake8-ruler', 'flake8_ruler', 'flakehell', 'flake8')
 
 
 class Config(NamedTuple):
@@ -16,7 +16,7 @@ class Config(NamedTuple):
 
     @property
     def plugins(self) -> Dict[str, List[str]]:
-        return self.content['plugins']
+        return self.content.get('plugins', {})
 
     @classmethod
     def from_path(cls, *paths: Union[str, Path]) -> 'Config':
@@ -48,13 +48,38 @@ class Config(NamedTuple):
         config = self.content.copy()
         for subconfig in other:
             config.update(subconfig.content)
-
-        for section in ('plugins', 'exceptions'):
-            config[section] = dict()
-            for subconfig in other:
-                config[section].update(subconfig.content.get(section, {}))
-
+        config['plugins'] = dict(self._merge_plugins(self, *other))
         return type(self)(config)
+
+    @classmethod
+    def _merge_plugins(cls, *configs: 'Config') -> Iterator[Tuple[str, List[str]]]:
+        plugins: Set[str] = set()
+        for config in configs:
+            plugins.update(config.plugins)
+        for plugin in plugins:
+            rules_prefix = []
+            rules_suffix = []
+            for config in configs:
+                rules = config.plugins.get(plugin)
+                if not rules:
+                    continue
+                split_at = 0
+                for i, rule in enumerate(rules, 1):
+                    if '*' in rule or '?' in rule:
+                        split_at = i
+                    else:
+                        break
+                rules_prefix.extend(rules[:split_at])
+                rules_suffix.extend(rules[split_at:])
+            yield plugin, cls._deduplicate(rules_prefix + rules_suffix)
+
+    @staticmethod
+    def _deduplicate(items: List[str]) -> List[str]:
+        result = []
+        for item in items:
+            if item not in result:
+                result.append(item)
+        return result
 
     @classmethod
     def from_content(cls, content: str) -> 'Config':
@@ -63,7 +88,11 @@ class Config(NamedTuple):
             if tool_name in config:
                 config = config[tool_name]
                 break
-        config = cls(config)
+        return cls.from_mapping(config)
+
+    @classmethod
+    def from_mapping(cls, mapping: Dict[str, Any]) -> 'Config':
+        config = cls(mapping)
 
         for section in ('plugins', 'exceptions'):
             if section in config.content:

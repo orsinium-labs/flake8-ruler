@@ -59,5 +59,5 @@ def test_warn_unknown_rule(tmp_path: Path):
     """))
     code, output = run('--input', input_path, '--output', output_path)
     assert code == 1
-    exp = 'WARNING: unknown_plugin is expected but not found\n'
+    exp = 'unknown_plugin is expected but not found\n'
     assert exp in output
