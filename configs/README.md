@@ -1,6 +1,6 @@
-# flake8_ruler configs
+# flake8-ruler configs
 
-This directory contains some `flake8_ruler` configs that you can directly include into your own using the `base` directive.
+This directory contains some [flake8_ruler](./..) configs that you can directly include into your own using the `base` directive.
 
 Add it in your `pyproject.toml` like this:
 
