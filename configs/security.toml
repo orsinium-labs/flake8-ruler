@@ -1,0 +1,8 @@
+# The config enables security-focused plugins.
+# They may produce a lot of false-positives in places where you don't care about security
+# (like using MD5 for hashing something that the user can never see or forge)
+# but it is a tradeoff you should be willing to accept in some critical applications.
+# When you face such false-positive, think twice and then suppress it with `# noqa`.
+[tool.flake8_ruler.plugins]
+dlint = ["+*"]
+flake8-bandit = ["+*"]

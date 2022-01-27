@@ -1,3 +1,34 @@
+# The config enables error codes that report issues that, most likely, indicate
+# actual bugs in your code. Some of the errors, like implicit string concatentaion,
+# do not mean that there is definitely a bug but it is very probable.
+#
+# If your code triggers any of these violations:
+#
+# + Try to refactor the code rather than suppressing the error.
+# + If you're sure that your code is valid and cannot be refactored,
+#   consider openning an issue in the bug tracker of the plugin that
+#   reported the violation.
+# + If you think the rule checks not for bugs but rather for something opinionated,
+#   open a Pull Request into flake8-ruler removing the rule.
+
 [tool.flake8_ruler.plugins]
 pyflakes = ["+*"]
 flake8-bugbear = ["+*"]
+flake8-pylint = ["-PL*", "+PLE*", "+PLF*"]
+wemake-python-styleguide = [
+    "-*", "+WPS0",
+    # "consistency" section
+    "+WPS308", "+WPS312", "+WPS314", "+WPS326", "+WPS327", "+WPS328", "+WPS329",
+    "+WPS330", "+WPS344", "+WPS345", "+WPS346", "+WPS349", "+WPS356", "+WPS362",
+    # "best practices" section
+    "+WPS405", "+WPS406", "+WPS408", "+WPS414", "+WPS415", "+WPS416", "+WPS417",
+    "+WPS419", "+WPS423", "+WPS426", "+WPS427", "+WPS428", "+WPS434", "+WPS435",
+    "+WPS438", "+WPS439", "+WPS441", "+WPS442", "+WPS443", "+WPS444", "+WPS445",
+    "+WPS448", "+WPS449", "+WPS452", "+WPS455", "+WPS457", "+WPS459", "+WPS463",
+    "+WPS465", "+WPS467", "+WPS469",
+    # "refactoring" section
+    "+WPS500", "+WPS508", "+WPS515", "+WPS521", "+WPS523", "+WPS524", "+WPS525",
+    # "OOP" section
+    "+WPS606", "+WPS608", "+WPS611", "+WPS614",
+]
+
