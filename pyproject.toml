@@ -1,8 +1,6 @@
 [tool.flake8_ruler]
 max_line_length = 90
-
-[tool.flake8_ruler.plugins]
-"*" = ["+*"]
+base = ["./configs/bugs.toml"]
 
 [tool.mypy]
 files = ["flake8_ruler", "tests"]
