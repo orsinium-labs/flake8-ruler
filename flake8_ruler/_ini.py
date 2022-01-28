@@ -38,9 +38,6 @@ class INI(NamedTuple):
     def include_plugin(self, plugin_name: str) -> None:
         self.parser['flake8']['select'] += f'\n# {plugin_name}'
 
-    def exclude_plugin(self, plugin_name: str) -> None:
-        self.parser['flake8']['ignore'] += f'\n# {plugin_name}'
-
     def include(self, code: str, message: str) -> None:
         message = message.replace("%", "*")
         self.parser['flake8']['select'] += f'\n{code},  # {message}'

@@ -1,6 +1,7 @@
 from pathlib import Path
 import subprocess
 import sys
+import re
 from textwrap import dedent
 from typing import Tuple
 from flake8_ruler import main
@@ -23,6 +24,11 @@ OUTPUT_CONFIG = """
         # pyflakes
         F621,  # too many expressions in star-unpacking assignment
         F622,  # two starred expressions in assignment
+    ignore =
+        C90,  # mccabe
+        E,  # pycodestyle
+        W,  # pycodestyle
+        F,  # pyflakes
 """
 
 
@@ -46,7 +52,9 @@ def test_main(tmp_path: Path):
     result = subprocess.run(cmd)
     assert result.returncode == 0
     actual = output_path.read_text().replace('\t', '    ').strip()
-    exp = dedent(OUTPUT_CONFIG).strip().replace('select =', 'select = ')
+    exp = dedent(OUTPUT_CONFIG).strip()
+    exp = exp.replace('select =', 'select = ')
+    exp = exp.replace('ignore =', 'ignore = ')
     assert actual == exp
 
 
@@ -59,5 +67,5 @@ def test_warn_unknown_rule(tmp_path: Path):
     """))
     code, output = run('--input', input_path, '--output', output_path)
     assert code == 1
-    exp = 'unknown_plugin is expected but not found\n'
-    assert exp in output
+    exp = re.compile('.*unknown_plugin.*expected but not installed')
+    assert exp.search(output)

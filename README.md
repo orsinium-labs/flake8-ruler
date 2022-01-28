@@ -11,6 +11,8 @@ Features:
 + Remote configs.
 + Predefined configs for bugs, security, styleguides.
 
+![example of the command output](./screenshot.png)
+
 ## Getting started
 
 Install:

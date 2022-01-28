@@ -23,7 +23,6 @@ END = '\033[0m'
 class Code(NamedTuple):
     code: str
     message: str
-    enabled: bool
 
 
 class Command:
@@ -44,37 +43,33 @@ class Command:
         ini = INI.from_path(args.output)
         ini.set_config(config)
 
-        for plugin_name in self.get_plugins(config):
+        for plugin in self.get_plugins(config):
             codes_enabled = 0
-            codes_disabled = 0
-            for code in self.get_codes(plugin_name, config):
-                if code.enabled:
-                    if not codes_enabled:
-                        ini.include_plugin(plugin_name)
-                    codes_enabled += 1
-                    ini.include(code.code, code.message)
-                else:
-                    if not codes_disabled:
-                        ini.include_plugin(plugin_name)
-                    codes_disabled += 1
-                    ini.exclude(code.code, code.message)
-            color = GREEN if codes_enabled else BLUE
-            msg = f"{color}{plugin_name}{END}: {codes_enabled} enabled, {codes_disabled} disabled"
-            self.print(msg)
+            for prefix in plugin.codes:
+                ini.exclude(prefix, plugin.name)
+            for code in self.get_codes(plugin.name, config):
+                if not codes_enabled:
+                    ini.include_plugin(plugin.name)
+                codes_enabled += 1
+                ini.include(code.code, code.message)
+            if codes_enabled:
+                self.print(f"{GREEN}{plugin.name}{END}: {codes_enabled} enabled")
+            else:
+                self.print(f"{BLUE}{plugin.name}{END}: installed but disabled")
         ini.save()
         return self.warnings
 
-    def get_plugins(self, config: Config) -> Iterator[str]:
+    def get_plugins(self, config: Config) -> Iterator[flake8_codes.Plugin]:
         expected_plugins = {plugin for plugin in config.plugins if '*' not in plugin}
         installed_plugins = set()
         for plugin in sorted(flake8_codes.get_installed()):
             if plugin.name in installed_plugins:
                 continue
             installed_plugins.add(plugin.name)
-            yield plugin.name
+            yield plugin
         missed_plugins = expected_plugins - installed_plugins
         for plugin_name in missed_plugins:
-            self.warn(f'{plugin_name} is expected but not found')
+            self.warn(f'{YELLOW}{plugin_name}{END}: expected but not installed')
 
     def get_codes(self, plugin_name: str, config: 'Config') -> Iterator[Code]:
         rules = config.get_rules(plugin_name)
@@ -82,13 +77,14 @@ class Command:
             codes = flake8_codes.extract(plugin_name)
         except ImportError:
             if rules.content:
-                self.warn(f"cannot extract codes for {plugin_name}")
+                self.warn(f"{RED}{plugin_name}{END}: cannot extract codes")
             return
         for code, message in codes.items():
-            yield Code(code=code, message=message, enabled=rules.included(code))
+            if rules.included(code):
+                yield Code(code=code, message=message)
 
     def warn(self, text: str) -> None:
-        print(f'{YELLOW}WARNING:{END}', text, file=self.stream)
+        print(text, file=self.stream)
         self.warnings += 1
 
     def print(self, text: str) -> None:
