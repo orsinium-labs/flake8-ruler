@@ -1,4 +1,5 @@
 import pytest
+
 from flake8_ruler._config import Config
 
 

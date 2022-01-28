@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from pathlib import Path
 from typing import TYPE_CHECKING, List, NamedTuple
 
+
 if TYPE_CHECKING:
     from ._config import Config
 

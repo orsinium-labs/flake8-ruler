@@ -1,11 +1,13 @@
-from pathlib import Path
-from typing import Any, Dict, Iterator, List, Set, Tuple, Union, NamedTuple
 import re
+from pathlib import Path
+from typing import Any, Dict, Iterator, List, NamedTuple, Set, Tuple, Union
+
 import toml
 import urllib3
-from flake8.utils import normalize_paths
-from flake8.utils import fnmatch
+from flake8.utils import fnmatch, normalize_paths
+
 from ._rules import Rules
+
 
 REX_NAME = re.compile(r'[-_.]+')
 TOOL_NAMES = ('flake8-ruler', 'flake8_ruler', 'flakehell', 'flake8')

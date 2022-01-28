@@ -1,11 +1,13 @@
-from pathlib import Path
+import re
 import subprocess
 import sys
-import re
+from io import StringIO
+from pathlib import Path
 from textwrap import dedent
 from typing import Tuple
+
 from flake8_ruler import main
-from io import StringIO
+
 
 INPUT_CONFIG = """
     [tool.flake8_ruler]

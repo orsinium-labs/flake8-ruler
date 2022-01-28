@@ -1,4 +1,5 @@
 from typing import List, NamedTuple
+
 from flake8.utils import fnmatch
 
 

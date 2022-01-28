@@ -1,9 +1,10 @@
-from pathlib import Path
 import sys
 from argparse import ArgumentParser
-from typing import List, NoReturn, TextIO, NamedTuple
-from typing import Iterator
+from pathlib import Path
+from typing import Iterator, List, NamedTuple, NoReturn, TextIO
+
 import flake8_codes
+
 from ._config import Config
 from ._ini import INI
 
