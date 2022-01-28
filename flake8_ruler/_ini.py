@@ -33,13 +33,21 @@ class INI(NamedTuple):
             if k not in CUSTOM:
                 self.parser['flake8'][k] = str(v)
         self.parser['flake8']['select'] = ''
+        self.parser['flake8']['ignore'] = ''
 
-    def add_plugin_name(self, plugin_name: str) -> None:
+    def include_plugin(self, plugin_name: str) -> None:
         self.parser['flake8']['select'] += f'\n# {plugin_name}'
 
-    def add_code(self, code: str, message: str) -> None:
+    def exclude_plugin(self, plugin_name: str) -> None:
+        self.parser['flake8']['ignore'] += f'\n# {plugin_name}'
+
+    def include(self, code: str, message: str) -> None:
         message = message.replace("%", "*")
         self.parser['flake8']['select'] += f'\n{code},  # {message}'
+
+    def exclude(self, code: str, message: str) -> None:
+        message = message.replace("%", "*")
+        self.parser['flake8']['ignore'] += f'\n{code},  # {message}'
 
     def save(self) -> None:
         with self.path.open('w') as stream:

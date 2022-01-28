@@ -1,8 +1,8 @@
 from pathlib import Path
 import sys
 from argparse import ArgumentParser
-from typing import List, NoReturn, TextIO
-from typing import Iterator, Tuple
+from typing import List, NoReturn, TextIO, NamedTuple
+from typing import Iterator
 import flake8_codes
 from ._config import Config
 from ._ini import INI
@@ -18,6 +18,12 @@ YELLOW = '\033[93m'
 BLUE = '\033[94m'
 MAGENTA = '\033[95m'
 END = '\033[0m'
+
+
+class Code(NamedTuple):
+    code: str
+    message: str
+    enabled: bool
 
 
 class Command:
@@ -40,14 +46,21 @@ class Command:
 
         for plugin_name in self.get_plugins(config):
             codes_enabled = 0
-            for code, message in self.get_codes(plugin_name, config):
-                if not codes_enabled:
-                    ini.add_plugin_name(plugin_name)
-                codes_enabled += 1
-                ini.add_code(code, message)
-            if codes_enabled:
-                msg = f"enabled {codes_enabled} codes for {GREEN}{plugin_name}{END}"
-                self.print(msg)
+            codes_disabled = 0
+            for code in self.get_codes(plugin_name, config):
+                if code.enabled:
+                    if not codes_enabled:
+                        ini.include_plugin(plugin_name)
+                    codes_enabled += 1
+                    ini.include(code.code, code.message)
+                else:
+                    if not codes_disabled:
+                        ini.include_plugin(plugin_name)
+                    codes_disabled += 1
+                    ini.exclude(code.code, code.message)
+            color = GREEN if codes_enabled else BLUE
+            msg = f"{color}{plugin_name}{END}: {codes_enabled} enabled, {codes_disabled} disabled"
+            self.print(msg)
         ini.save()
         return self.warnings
 
@@ -63,7 +76,7 @@ class Command:
         for plugin_name in missed_plugins:
             self.warn(f'{plugin_name} is expected but not found')
 
-    def get_codes(self, plugin_name: str, config: 'Config') -> Iterator[Tuple[str, str]]:
+    def get_codes(self, plugin_name: str, config: 'Config') -> Iterator[Code]:
         rules = config.get_rules(plugin_name)
         try:
             codes = flake8_codes.extract(plugin_name)
@@ -72,8 +85,7 @@ class Command:
                 self.warn(f"cannot extract codes for {plugin_name}")
             return
         for code, message in codes.items():
-            if rules.included(code):
-                yield (code, message)
+            yield Code(code=code, message=message, enabled=rules.included(code))
 
     def warn(self, text: str) -> None:
         print(f'{YELLOW}WARNING:{END}', text, file=self.stream)

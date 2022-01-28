@@ -35,12 +35,18 @@ tasks:
       - install:test
     cmds:
       - .venvs/base/bin/flitenv test run pytest {{.CLI_ARGS}}
+  flake8_ruler:run:
+    desc: "lint Python code"
+    deps:
+      - install:lint
+    cmds:
+      - .venvs/base/bin/flitenv lint run python3 -m flake8_ruler {{.CLI_ARGS}}
   flake8:run:
     desc: "lint Python code"
     deps:
       - install:lint
     cmds:
-      - .venvs/base/bin/flitenv lint run flake8 {{.CLI_ARGS}} .
+      - .venvs/base/bin/flitenv lint run flake8 {{.CLI_ARGS}}
   mypy:run:
     desc: "check type annotations"
     deps:

@@ -29,12 +29,15 @@ dependencies = [
     "flake8",
     "flake8-codes",
     "urllib3",
+    "toml",
 ]
+
 [project.optional-dependencies]
 test = [
     "pytest",
 ]
 lint = [
+    "flake8-length",
     "wemake-python-styleguide",
     "unify",
     "isort",
@@ -46,6 +49,9 @@ Source = "https://github.com/orsinium-labs/flake8-ruler"
 [tool.flake8_ruler]
 max_line_length = 90
 base = ["./configs/bugs.toml"]
+
+[tool.flake8_ruler.plugins]
+flake8-length = ["+*"]
 
 [tool.mypy]
 files = ["flake8_ruler", "tests"]
