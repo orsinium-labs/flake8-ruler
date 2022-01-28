@@ -49,6 +49,7 @@ Source = "https://github.com/orsinium-labs/flake8-ruler"
 [tool.flake8_ruler]
 max_line_length = 90
 base = ["./configs/bugs.toml"]
+exclude = [".venvs"]
 
 [tool.flake8_ruler.plugins]
 flake8-length = ["+*"]

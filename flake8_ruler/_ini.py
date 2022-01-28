@@ -31,8 +31,11 @@ class INI(NamedTuple):
     def set_config(self, config: 'Config') -> None:
         self.parser['flake8'] = {}
         for k, v in config.content.items():
-            if k not in CUSTOM:
-                self.parser['flake8'][k] = str(v)
+            if k in CUSTOM:
+                continue
+            if isinstance(v, list):
+                v = '\n' + ',\n'.join(v)
+            self.parser['flake8'][k] = str(v)
         self.parser['flake8']['select'] = ''
         self.parser['flake8']['ignore'] = ''
 

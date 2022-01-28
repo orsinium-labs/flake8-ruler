@@ -72,7 +72,7 @@ class Command:
         for plugin_name in missed_plugins:
             self.warn(f'{YELLOW}{plugin_name}{END}: expected but not installed')
 
-    def get_codes(self, plugin_name: str, config: 'Config') -> Iterator[Code]:
+    def get_codes(self, plugin_name: str, config: 'Config') -> Iterator[Code]:  # noqa: WPS463
         rules = config.get_rules(plugin_name)
         try:
             codes = flake8_codes.extract(plugin_name)
