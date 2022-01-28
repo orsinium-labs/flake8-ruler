@@ -5,29 +5,29 @@ from flake8_ruler._config import Config
 
 @pytest.mark.parametrize('given1, given2, expected', [
     (
-        {'pyflakes': ["+*", "-F401"]},
-        {'pyflakes': ["+*", "-F402"]},
-        {'pyflakes': ["+*", "-F401", "-F402"]},
+        {'pyflakes': ['+*', '-F401']},
+        {'pyflakes': ['+*', '-F402']},
+        {'pyflakes': ['+*', '-F401', '-F402']},
     ),
     (
-        {'pyflakes': ["+*", "-F401", "-F402"]},
-        {'pyflakes': ["+*", "-F403", "-F404"]},
-        {'pyflakes': ["+*", "-F401", "-F402", "-F403", "-F404"]},
+        {'pyflakes': ['+*', '-F401', '-F402']},
+        {'pyflakes': ['+*', '-F403', '-F404']},
+        {'pyflakes': ['+*', '-F401', '-F402', '-F403', '-F404']},
     ),
     (
-        {'pyflakes': ["-F401"]},
-        {'pyflakes': ["+*", "-F402"]},
-        {'pyflakes': ["+*", "-F401", "-F402"]},
+        {'pyflakes': ['-F401']},
+        {'pyflakes': ['+*', '-F402']},
+        {'pyflakes': ['+*', '-F401', '-F402']},
     ),
     (
         {},
-        {'pyflakes': ["+*"]},
-        {'pyflakes': ["+*"]},
+        {'pyflakes': ['+*']},
+        {'pyflakes': ['+*']},
     ),
     (
-        {'pyflakes': ["+*"]},
+        {'pyflakes': ['+*']},
         {},
-        {'pyflakes': ["+*"]},
+        {'pyflakes': ['+*']},
     ),
 ])
 def test_merge_plugins(given1, given2, expected):

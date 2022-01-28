@@ -40,11 +40,11 @@ class INI(NamedTuple):
         self.parser['flake8']['select'] += f'\n# {plugin_name}'
 
     def include(self, code: str, message: str) -> None:
-        message = message.replace("%", "*")
+        message = message.replace('%', '*')
         self.parser['flake8']['select'] += f'\n{code},  # {message}'
 
     def exclude(self, code: str, message: str) -> None:
-        message = message.replace("%", "*")
+        message = message.replace('%', '*')
         self.parser['flake8']['ignore'] += f'\n{code},  # {message}'
 
     def save(self) -> None:

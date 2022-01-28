@@ -54,9 +54,9 @@ class Command:
                 codes_enabled += 1
                 ini.include(code.code, code.message)
             if codes_enabled:
-                self.print(f"{GREEN}{plugin.name}{END}: {codes_enabled} enabled")
+                self.print(f'{GREEN}{plugin.name}{END}: {codes_enabled} enabled')
             else:
-                self.print(f"{BLUE}{plugin.name}{END}: installed but disabled")
+                self.print(f'{BLUE}{plugin.name}{END}: installed but disabled')
         ini.save()
         return self.warnings
 
@@ -78,7 +78,7 @@ class Command:
             codes = flake8_codes.extract(plugin_name)
         except ImportError:
             if rules.content:
-                self.warn(f"{RED}{plugin_name}{END}: cannot extract codes")
+                self.warn(f'{RED}{plugin_name}{END}: cannot extract codes')
             return
         for code, message in codes.items():
             if rules.included(code):
